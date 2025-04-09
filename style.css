@@ -1,8 +1,7 @@
 html {
     scroll-behavior: smooth;
-    height: 100%;
-    margin: 0;
-    background-color: linear-gradient(180deg, #0f0f11 0%, #1a1a1d 100%);
+    background-color: #0f0f11; /* fallback solid color */
+    overscroll-behavior: none; /* disables scroll bounce */
   }
   
   * {
@@ -20,7 +19,7 @@ html {
   
   body {
     margin: 0 auto;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', monospace, sans-serif;
     background: linear-gradient(180deg, #0f0f11 0%, #1a1a1d 100%);
     color: var(--fg);
     font-size: 15px;
@@ -75,6 +74,17 @@ html {
     font-weight: 800;
     font-size: 15px;
   }
+
+
+
+  a {
+    color: #F28705;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    color: #F25C05;
+  }
   
   .line {
     margin: 1px 0;
@@ -107,14 +117,29 @@ html {
     border-radius: 8px;
   }
   
+
   .typed {
     font-size: 30px;
-    justify-content: start;
+    display: inline-block;
     overflow: hidden;
     white-space: nowrap;
-    border-right: 5px solid;
+    border-right: 5px solid #c42629; /* thinner, cursor-like */
     width: 0;
     animation: typing 0.8s steps(30, end) forwards, blinking 0.9s infinite;
+    line-height: 1; /* key to align it with text */
+  }
+  
+  .typed:hover {
+    animation: typing 0.8s steps(30, end) forwards, blinking 0.9s infinite, glitch 0.3s infinite;
+  }
+  
+  @keyframes glitch {
+    0% { transform: translate(0); }
+    20% { transform: translate(-1px, 1px); }
+    40% { transform: translate(1px, -1px); }
+    60% { transform: translate(-1px, 1px); }
+    80% { transform: translate(1px, -1px); }
+    100% { transform: translate(0); }
   }
   
   @keyframes typing {
@@ -139,45 +164,40 @@ html {
   
   .timeline {
     position: relative;
-    max-width: 900px;
-    margin: auto;
-    padding: 20px 0;
+    padding: 50px 0;
+    min-height: 500px; /* or a value that makes sense for your layout */
   }
-  
-  .timeline::after {
-    content: '';
+  /* Fix timeline line height */
+.timeline::before {
+    content: "";
     position: absolute;
-    width: 2px;
-    background-color: var(--line);
     top: 0;
-    bottom: 0;
     left: 50%;
-    transform: translateX(-50%);
+    width: 2px;
+    background: #fff;
+    height: 100%; /* Ensure the line spans the entire height */
   }
   
+  /* Fix timeline item positioning */
   .timeline-item {
     position: relative;
     width: 50%;
     padding: 20px 40px;
+    box-sizing: border-box;
+    animation: fadeInUp 0.8s ease;
   }
   
-  .timeline-item.left { left: 0; }
-  .timeline-item.right { left: 50%; }
-  
-  .icon {
-    position: absolute;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 12px;
-    height: 12px;
-    background-color: var(--accent);
-    border-radius: 50%;
-    border: 2px solid var(--bg);
-    z-index: 1;
+  /* Left and Right items properly aligned */
+  .timeline-item.left { 
+    left: 0; 
   }
   
-  .content {
+  .timeline-item.right { 
+    left: 50%; 
+  }
+  
+  /* Fix the stretching issue */
+  .timeline-item .content {
     background: var(--box-bg);
     padding: 20px;
     border-radius: 8px;
@@ -185,44 +205,19 @@ html {
     animation: fadeInUp 0.8s ease;
   }
   
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  
+  /* Ensure flexbox works properly on smaller screens */
   @media only screen and (max-width: 800px) {
-    #flex {
-      flex-wrap: wrap;
-    }
-  
-    aside {
-      width: 100%;
-    }
-  
-    main {
-      order: 1;
-      font-size: medium;
-    }
-  
-    #navbar ul {
-      flex-wrap: wrap;
-      font-size: small;
-    }
-  
     .timeline-item {
       width: 100%;
       left: 0 !important;
       padding: 20px;
     }
   
-    .timeline::after {
-      left: 20px;
-      transform: none;
+    .timeline::before {
+      left: 50%;
     }
   
     .icon {
       left: 20px;
-      transform: none;
     }
   }
-  
